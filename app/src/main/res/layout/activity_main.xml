@@ -28,11 +28,10 @@
         android:text="PÁLINKA LISTÁZÁSA"
         android:textSize="20sp"/>
 
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textViewList"
-        android:scrollbars="vertical"
-        android:textSize="20sp"/>
+        android:id="@+id/listView"
+        android:scrollbars="vertical"/>
 
 </LinearLayout>

@@ -7,24 +7,33 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Button buttonRecord;
     private Button buttonSearch;
     private Button buttonList;
-    private TextView textViewList;
+    private ArrayAdapter<String> adapter;
+    private List<String> entryList;
+    private ListView listView;
     private DBHelper dbHelper;
 
     public void init() {
         buttonRecord = findViewById(R.id.buttonRecord);
         buttonSearch = findViewById(R.id.buttonSearch);
         buttonList = findViewById(R.id.buttonList);
-        textViewList = findViewById(R.id.textViewList);
-        textViewList.setMovementMethod(new ScrollingMovementMethod());
+        listView = findViewById(R.id.listView);
         dbHelper = new DBHelper(MainActivity.this);
+        entryList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, entryList);
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -59,14 +68,15 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,
                 "Nincs lekérdezhető adat", Toast.LENGTH_SHORT).show();
                 } else {
-                    StringBuilder sb = new StringBuilder();
+                    entryList.clear();
                     while (datas.moveToNext()) {
-                        sb.append("ID: ").append(datas.getInt(0)).append("\n");
-                        sb.append("Főző: ").append(datas.getString(1)).append("\n");
-                        sb.append("Gyümölcs: ").append(datas.getString(2)).append("\n");
-                        sb.append("Alkohol tartalom: ").append(datas.getInt(3)).append("\n\n");
+                        String entry = "ID: " + datas.getInt(0) + "\n" +
+                                "Főző: " + datas.getString(1) + "\n" +
+                                "Gyümölcs: " + datas.getString(2) + "\n" +
+                                "ALkoholmérték: " + datas.getInt(3) + "\n\n";
+                        entryList.add(entry);
                     }
-                    textViewList.setText(sb);
+                    adapter.notifyDataSetChanged();
                 }
             }
         });
